@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./return-button.module.css";
+import styles from "./return-button.module.scss";
 import { ReturnIcon } from "../icons/return-icon";
 
 interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {

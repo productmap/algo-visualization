@@ -1,6 +1,6 @@
 import React from "react";
 import { nanoid } from "nanoid";
-import styles from "./radio-input.module.css";
+import styles from "./radio-input.module.scss";
 
 interface RadioProps extends React.HTMLProps<HTMLInputElement> {
   label: string;

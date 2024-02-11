@@ -1,0 +1,40 @@
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 952px;
+  width: max-content;
+  margin: 0 auto;
+  flex-flow: row nowrap;
+}
+
+.result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: min-content;
+  padding-top: 120px;
+  margin: 0 auto;
+  flex-flow: row nowrap;
+  gap: 16px;
+  list-style: none;
+  position: relative;
+}
+
+.row {
+  display: inline-flex;
+  //width: 100%;
+  justify-content: space-between;
+  width: max-content;
+}
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 16px;
+}
+
+.input {
+  width: 204px;
+}

@@ -1,0 +1,26 @@
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 512px;
+  margin: 0 auto;
+  flex-flow: row nowrap;
+}
+
+.hint {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  flex-flow: column nowrap;
+  row-gap: 16px;
+}
+
+.result {
+  display: flex;
+  justify-content: center;
+  width: min-content;
+  padding-top: 120px;
+  margin: 0 auto;
+  flex-flow: row nowrap;
+  gap: 16px;
+}
