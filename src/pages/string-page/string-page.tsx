@@ -4,9 +4,11 @@ import { Button, Circle, Input, SolutionLayout } from "../../components/ui";
 import style from "./string-page.module.scss";
 import {TLettersArray} from "../../utils/types/misc";
 import {DELAY_IN_MS} from "../../utils/constants/delays";
+import { useForm } from "../../utils/hooks/useForm";
 
 export const StringPage: FC = () => {
-  const [input, setInput] = useState<string>("");
+  const { formValues, setValues, handleChange } = useForm({ value: "" });
+  const { value } = formValues;
   const [result, setResult] = useState<TLettersArray[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
 
@@ -56,12 +58,13 @@ export const StringPage: FC = () => {
     e.preventDefault();
     setLoader(true);
 
-    const string = Array.from(input).map((letter) => ({
+    const string = Array.from(String(value)).map((letter) => ({
       letter,
       state: ElementStates.Default,
     }));
     setResult(string);
     reverse(string);
+    setValues({ value: "" });
   };
 
   return (
@@ -71,17 +74,19 @@ export const StringPage: FC = () => {
           isLimitText={true}
           maxLength={11}
           minLength={1}
-          onChange={(e) => setInput(e.currentTarget.value)}
+          onChange={handleChange}
           placeholder="Введите текст"
           required
           type="text"
-          value={input}
+          value={value}
+          name="value"
         />
         <Button
           type="submit"
           text="Развернуть"
           extraClass="ml-6"
           isLoader={loader}
+          disabled={value.length < 1}
         />
       </form>
       <div className={style.result}>

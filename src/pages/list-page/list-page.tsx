@@ -12,12 +12,16 @@ import { ElementStates } from "../../utils/types/element-states";
 import { LinkedList } from "../../utils/classes/list";
 import { SHORT_DELAY_IN_MS } from "../../utils/constants/delays";
 import style from "./list-page.module.scss";
+import { useForm } from "../../utils/hooks/useForm";
 
 const linkedList = new LinkedList<string>(["0", "34", "8", "1"]);
 
 export const ListPage: FC = () => {
-  const [input, setInput] = useState<string>("");
-  const [index, setIndex] = useState<number>(0);
+  const { formValues, setValues, handleChange } = useForm({
+    input: "",
+    index: 0,
+  });
+  const { input, index } = formValues;
   const [disabled, setDisabled] = useState(false);
   const currentState = linkedList
     .getCurrentState()
@@ -61,7 +65,7 @@ export const ListPage: FC = () => {
     result[0].state = ElementStates.Default;
     setLoader({ ...loader, addToHead: false });
     setDisabled(false);
-    setInput("");
+    setValues({ ...formValues, input: "" });
   };
 
   const deleteFromHead = async () => {
@@ -116,7 +120,7 @@ export const ListPage: FC = () => {
     result.map((item) => (item.state = ElementStates.Default));
     setDisabled(false);
     setLoader({ ...loader, addToTail: false });
-    setInput("");
+    setValues({ ...formValues, input: "" });
   };
 
   const deleteFromTail = async () => {
@@ -221,7 +225,7 @@ export const ListPage: FC = () => {
             isLimitText={true}
             disabled={disabled}
             value={input}
-            onChange={(e) => setInput(e.currentTarget.value)}
+            onChange={handleChange}
             required
             extraClass={style.input}
           />
@@ -229,7 +233,7 @@ export const ListPage: FC = () => {
             text="Добавить в head"
             extraClass={"ml-6"}
             isLoader={loader.addToHead}
-            disabled={disabled}
+            disabled={disabled || input.length === 0}
             onClick={addToHead}
             linkedList="small"
           />
@@ -237,7 +241,7 @@ export const ListPage: FC = () => {
             text="Добавить в tail»"
             extraClass={"ml-6"}
             isLoader={loader.addToTail}
-            disabled={disabled}
+            disabled={disabled || input.length === 0}
             onClick={addToTail}
             linkedList="small"
           />
@@ -245,7 +249,7 @@ export const ListPage: FC = () => {
             text="Удалить из head"
             extraClass={"ml-6"}
             isLoader={loader.deleteFromHead}
-            disabled={disabled}
+            disabled={disabled || !result.length}
             onClick={deleteFromHead}
             linkedList="small"
           />
@@ -253,7 +257,7 @@ export const ListPage: FC = () => {
             text="Удалить из tail"
             extraClass={"ml-6"}
             isLoader={loader.deleteFromTail}
-            disabled={disabled}
+            disabled={disabled || !result.length}
             onClick={deleteFromTail}
             linkedList="small"
           />
@@ -263,14 +267,20 @@ export const ListPage: FC = () => {
             type="number"
             placeholder="Введите индекс"
             maxLength={10}
-            onChange={(e) => setIndex(Number(e.currentTarget.value))}
+            onChange={handleChange}
             extraClass={style.input}
           />
           <Button
             text="Добавить по индексу"
             extraClass={"ml-6"}
             isLoader={loader.addByIndex}
-            disabled={disabled}
+            disabled={
+              disabled ||
+              !input ||
+              !index ||
+              index > result.length - 1 ||
+              index < 0
+            }
             onClick={addByIndex}
             linkedList="big"
           />
@@ -278,7 +288,13 @@ export const ListPage: FC = () => {
             text="Удалить по индексу"
             extraClass={"ml-6"}
             isLoader={loader.deleteByIndex}
-            disabled={disabled}
+            disabled={
+              disabled ||
+              !input ||
+              !index ||
+              index > result.length - 1 ||
+              index < 0
+            }
             onClick={deleteByIndex}
             linkedList="big"
           />
@@ -299,7 +315,7 @@ export const ListPage: FC = () => {
                 state={item.state}
                 index={index}
               />
-              {index !== result.length - 1 && <ArrowIcon key={index}/>}
+              {index !== result.length - 1 && <ArrowIcon key={index} />}
               {item.add && (
                 <Circle
                   isSmall={true}

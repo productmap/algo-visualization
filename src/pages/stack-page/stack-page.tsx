@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import { Button, Circle, Input, SolutionLayout } from "../../components/ui";
 import { TItem } from "../../utils/types/misc";
 import { ElementStates } from "../../utils/types/element-states";
@@ -15,7 +15,8 @@ export const StackPage: FC = () => {
   const [loader, setLoader] = useState({ add: false, del: false });
   const [disabled, setDisabled] = useState<boolean>(false);
 
-  const handleAction = async (action: "add" | "delete") => {
+  const handleAction = async (evt: FormEvent, action: "add" | "delete") => {
+    evt.preventDefault();
     if (
       (action === "add" && !input) ||
       (action === "delete" && result.length === 0)
@@ -51,7 +52,7 @@ export const StackPage: FC = () => {
           isLimitText={true}
           maxLength={4}
           minLength={1}
-          onChange={(e) => setInput(e.currentTarget.value)}
+          onChange={(evt) => setInput(evt.currentTarget.value)}
           placeholder="Введите текст"
           required
           type="text"
@@ -60,7 +61,7 @@ export const StackPage: FC = () => {
         />
         <Button
           text="Добавить"
-          onClick={() => handleAction("add")}
+          onClick={(evt) => handleAction(evt, "add")}
           extraClass="ml-6"
           isLoader={loader.add}
           disabled={disabled}
@@ -68,7 +69,7 @@ export const StackPage: FC = () => {
         <Button
           text="Удалить"
           extraClass="ml-6"
-          onClick={() => handleAction("delete")}
+          onClick={(evt) => handleAction(evt, "delete")}
           isLoader={loader.del}
           disabled={disabled}
         />

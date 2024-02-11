@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, FormEvent, useEffect, useState } from "react";
 import { Button, Circle, Input, SolutionLayout } from "../../components/ui";
 import { Queue } from "../../utils/classes/queue";
 import style from "./queue-page.module.scss";
@@ -18,7 +18,8 @@ export const QueuePage: FC = () => {
     setResult([...queue.container.map(() => "")]);
   }, []);
 
-  const handleQueueAction = async (action: "add" | "del") => {
+  const handleQueueAction = async (e: FormEvent, action: "add" | "del") => {
+    e.preventDefault();
     if (action === "add" && !input) return;
     setLoader({ ...loader, [action]: true });
     setDisabled(true);
@@ -52,7 +53,7 @@ export const QueuePage: FC = () => {
         />
         <Button
           text="Добавить"
-          onClick={() => handleQueueAction("add")}
+          onClick={(e) => handleQueueAction(e, "add")}
           extraClass="ml-6"
           isLoader={loader.add}
           disabled={disabled}
@@ -60,7 +61,7 @@ export const QueuePage: FC = () => {
         <Button
           text="Удалить"
           extraClass="ml-6"
-          onClick={() => handleQueueAction("del")}
+          onClick={(e) => handleQueueAction(e, "del")}
           isLoader={loader.del}
           disabled={disabled}
         />

@@ -1,7 +1,8 @@
 import React, { FC, FormEvent, useState } from "react";
 import { Button, Circle, Input, SolutionLayout } from "../../components/ui";
 import style from "../string-page/string-page.module.scss";
-import {DELAY_IN_MS, SHORT_DELAY_IN_MS} from "../../utils/constants/delays";
+import { SHORT_DELAY_IN_MS } from "../../utils/constants/delays";
+import { delay } from "../../utils/utils";
 
 export const FibonacciPage: FC = () => {
   const [input, setInput] = useState<string>("");
@@ -16,18 +17,15 @@ export const FibonacciPage: FC = () => {
     return arr;
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoader(true);
-
+    setInput("");
     if (input !== "0") {
-    const fibArray: number[] = getFibonacciNumbers(Number(input));
-      let t = DELAY_IN_MS;
+      const fibArray: number[] = getFibonacciNumbers(Number(input));
       for (let i = 0; i < fibArray.length; i++) {
-        setTimeout(() => {
-          setResult(fibArray.slice(0, i + 1));
-        }, t);
-        t += SHORT_DELAY_IN_MS;
+        setResult(fibArray.slice(0, i + 1));
+        await delay(SHORT_DELAY_IN_MS);
       }
     }
     setLoader(false);
@@ -50,6 +48,9 @@ export const FibonacciPage: FC = () => {
           text="Рассчитать"
           extraClass="ml-6"
           isLoader={loader}
+          disabled={
+            0 === input.length || Number(input) <= 0 || 19 < Number(input)
+          }
         />
       </form>
       <div className={style.result}>
