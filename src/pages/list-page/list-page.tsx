@@ -224,6 +224,7 @@ export const ListPage: FC = () => {
             maxLength={4}
             isLimitText={true}
             disabled={disabled}
+            name="input"
             value={input}
             onChange={handleChange}
             required
@@ -265,6 +266,8 @@ export const ListPage: FC = () => {
         <div className={style.row}>
           <Input
             type="number"
+            name="index"
+            value={index}
             placeholder="Введите индекс"
             maxLength={10}
             onChange={handleChange}

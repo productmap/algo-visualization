@@ -5,11 +5,16 @@ import style from "./queue-page.module.scss";
 import { SHORT_DELAY_IN_MS } from "../../utils/constants/delays";
 import { HEAD, TAIL } from "../../utils/constants/element-captions";
 import {delay} from "../../utils/utils";
+import { useForm } from "../../utils/hooks/useForm";
 
 const queue = new Queue<string>(7);
 
 export const QueuePage: FC = () => {
-  const [input, setInput] = useState<string>("");
+  // const [input, setInput] = useState<string>("");
+  const { formValues, setValues, handleChange } = useForm({
+    input: "",
+  });
+  const { input } = formValues;
   const [result, setResult] = useState<Array<string | number | null>>([]);
   const [loader, setLoader] = useState({ add: false, del: false });
   const [disabled, setDisabled] = useState<boolean>(false);
@@ -25,7 +30,7 @@ export const QueuePage: FC = () => {
     setDisabled(true);
     action === "add" ? queue.enqueue(input) : queue.dequeue();
     setResult([...queue.container]);
-    setInput("");
+    setValues({ input: "" });
     await delay(SHORT_DELAY_IN_MS);
     setDisabled(false);
     setLoader({ add: false, del: false });
@@ -33,22 +38,23 @@ export const QueuePage: FC = () => {
 
   const handleClear = () => {
     queue.clear();
-    setInput("");
+    setValues({ input: "" });
     setResult([...queue.container]);
   };
 
   return (
     <SolutionLayout title="Очередь">
-      <form className={style.form}>
+      <form className={style.form} onSubmit={(e) => handleQueueAction(e, "add")}>
         <Input
           isLimitText={true}
           maxLength={4}
           minLength={1}
-          onChange={(e) => setInput(e.currentTarget.value)}
+          onChange={handleChange}
           placeholder="Введите текст"
           required
           type="text"
           disabled={disabled}
+          name="input"
           value={input}
         />
         <Button
@@ -56,20 +62,20 @@ export const QueuePage: FC = () => {
           onClick={(e) => handleQueueAction(e, "add")}
           extraClass="ml-6"
           isLoader={loader.add}
-          disabled={disabled}
+          disabled={disabled || input.length < 1}
         />
         <Button
           text="Удалить"
           extraClass="ml-6"
           onClick={(e) => handleQueueAction(e, "del")}
           isLoader={loader.del}
-          disabled={disabled}
+          disabled={disabled || queue.length < 1}
         />
         <Button
           text="Очистить"
           onClick={handleClear}
           extraClass="ml-40"
-          disabled={disabled}
+          disabled={disabled || queue.length < 1}
         />
       </form>
       <div className={style.result}>

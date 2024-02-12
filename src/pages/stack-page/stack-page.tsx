@@ -47,7 +47,7 @@ export const StackPage: FC = () => {
 
   return (
     <SolutionLayout title="Стек">
-      <form className={style.form}>
+      <form className={style.form} onSubmit={(evt) => handleAction(evt, "add")}>
         <Input
           isLimitText={true}
           maxLength={4}
@@ -64,20 +64,20 @@ export const StackPage: FC = () => {
           onClick={(evt) => handleAction(evt, "add")}
           extraClass="ml-6"
           isLoader={loader.add}
-          disabled={disabled}
+          disabled={disabled || input.length < 1}
         />
         <Button
           text="Удалить"
           extraClass="ml-6"
           onClick={(evt) => handleAction(evt, "delete")}
           isLoader={loader.del}
-          disabled={disabled}
+          disabled={disabled || stack.length() < 1}
         />
         <Button
           text="Очистить"
           onClick={handleClear}
           extraClass="ml-40"
-          disabled={disabled}
+          disabled={disabled || stack.length() < 1}
         />
       </form>
       <div className={style.result}>

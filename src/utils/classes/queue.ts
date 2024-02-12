@@ -4,7 +4,6 @@ interface IQueue<T> {
   peak: () => T | null;
   clear: () => void;
   getQueue: () => (T | null)[];
-  getSize: () => number;
   isEmpty: () => boolean;
 }
 
@@ -55,6 +54,5 @@ export class Queue<T> implements IQueue<T> {
   };
 
   getQueue = () => this.container;
-  getSize = () => this.size;
   isEmpty = () => this.length === 0;
 }
