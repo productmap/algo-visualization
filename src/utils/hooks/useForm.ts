@@ -8,6 +8,7 @@ export function useForm<T>(inputValues: T): {
   const [formValues, setValues] = useState<T>(inputValues);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const { value, name } = e.target;
     setValues({ ...formValues, [name]: value });
   };
