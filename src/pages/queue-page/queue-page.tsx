@@ -12,9 +12,9 @@ const queue = new Queue<string>(7);
 export const QueuePage: FC = () => {
   // const [input, setInput] = useState<string>("");
   const { formValues, setValues, handleChange } = useForm({
-    input: "",
+    value: "",
   });
-  const { input } = formValues;
+  const { value } = formValues;
   const [result, setResult] = useState<Array<string | number | null>>([]);
   const [loader, setLoader] = useState({ add: false, del: false });
   const [disabled, setDisabled] = useState<boolean>(false);
@@ -25,12 +25,12 @@ export const QueuePage: FC = () => {
 
   const handleQueueAction = async (e: FormEvent, action: "add" | "del") => {
     e.preventDefault();
-    if (action === "add" && !input) return;
+    if (action === "add" && !value) return;
     setLoader({ ...loader, [action]: true });
     setDisabled(true);
-    action === "add" ? queue.enqueue(input) : queue.dequeue();
+    action === "add" ? queue.enqueue(value) : queue.dequeue();
     setResult([...queue.container]);
-    setValues({ input: "" });
+    setValues({ value: "" });
     await delay(SHORT_DELAY_IN_MS);
     setDisabled(false);
     setLoader({ add: false, del: false });
@@ -38,7 +38,7 @@ export const QueuePage: FC = () => {
 
   const handleClear = () => {
     queue.clear();
-    setValues({ input: "" });
+    setValues({ value: "" });
     setResult([...queue.container]);
   };
 
@@ -54,15 +54,16 @@ export const QueuePage: FC = () => {
           required
           type="text"
           disabled={disabled}
-          name="input"
-          value={input}
+          name="value"
+          value={value}
         />
         <Button
           text="Добавить"
           onClick={(e) => handleQueueAction(e, "add")}
           extraClass="ml-6"
           isLoader={loader.add}
-          disabled={disabled || input.length < 1}
+          disabled={disabled || value.length < 1}
+          name="add"
         />
         <Button
           text="Удалить"
@@ -70,12 +71,14 @@ export const QueuePage: FC = () => {
           onClick={(e) => handleQueueAction(e, "del")}
           isLoader={loader.del}
           disabled={disabled || queue.length < 1}
+          name="del"
         />
         <Button
           text="Очистить"
           onClick={handleClear}
           extraClass="ml-40"
           disabled={disabled || queue.length < 1}
+          name="clear"
         />
       </form>
       <div className={style.result}>

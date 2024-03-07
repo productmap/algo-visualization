@@ -123,14 +123,14 @@ export const SortingPage: FC = () => {
     setDisabled(false);
   };
 
-  const sort = (direction: Direction) => {
+  const sort = async (direction: Direction) => {
     if (sorting === "selection") {
       resetState();
-      selectionSort(columns, direction).then();
+      await selectionSort(columns, direction);
     }
     if (sorting === "bubble") {
       resetState();
-      bubbleSort(columns, direction).then();
+      await bubbleSort(columns, direction);
     }
   };
 

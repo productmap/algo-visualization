@@ -18,10 +18,10 @@ const linkedList = new LinkedList<string>(["0", "34", "8", "1"]);
 
 export const ListPage: FC = () => {
   const { formValues, setValues, handleChange } = useForm({
-    input: "",
+    value: "",
     index: 0,
   });
-  const { input, index } = formValues;
+  const { value, index } = formValues;
   const [disabled, setDisabled] = useState(false);
   const currentState = linkedList
     .getCurrentState()
@@ -39,12 +39,12 @@ export const ListPage: FC = () => {
   const addToHead = async () => {
     setLoader({ ...loader, addToHead: true });
     setDisabled(true);
-    linkedList.prepend(input);
+    linkedList.prepend(value);
     result[0] = {
       ...result[0],
       add: true,
       smallCircle: {
-        value: input,
+        value: value,
       },
     };
     setResult([...result]);
@@ -57,7 +57,7 @@ export const ListPage: FC = () => {
       },
     };
     result.unshift({
-      value: input,
+      value: value,
       state: ElementStates.Modified,
     });
     setResult([...result]);
@@ -65,7 +65,7 @@ export const ListPage: FC = () => {
     result[0].state = ElementStates.Default;
     setLoader({ ...loader, addToHead: false });
     setDisabled(false);
-    setValues({ ...formValues, input: "" });
+    setValues({ ...formValues, value: "" });
   };
 
   const deleteFromHead = async () => {
@@ -90,13 +90,13 @@ export const ListPage: FC = () => {
   const addToTail = async () => {
     setDisabled(true);
     setLoader({ ...loader, addToTail: true });
-    linkedList.append(input);
+    linkedList.append(value);
     const { length } = result;
     result[length - 1] = {
       ...result[length - 1],
       add: true,
       smallCircle: {
-        value: input,
+        value: value,
       },
     };
     setResult([...result]);
@@ -112,7 +112,7 @@ export const ListPage: FC = () => {
       ...result[length],
       add: false,
       state: ElementStates.Modified,
-      value: input,
+      value: value,
     };
 
     setResult([...result]);
@@ -120,7 +120,7 @@ export const ListPage: FC = () => {
     result.map((item) => (item.state = ElementStates.Default));
     setDisabled(false);
     setLoader({ ...loader, addToTail: false });
-    setValues({ ...formValues, input: "" });
+    setValues({ ...formValues, value: "" });
   };
 
   const deleteFromTail = async () => {
@@ -147,13 +147,13 @@ export const ListPage: FC = () => {
     if (!index) return;
     setDisabled(true);
     setLoader({ ...loader, addByIndex: true });
-    linkedList.addByIndex(input, index);
+    linkedList.addByIndex(value, index);
     for (let i = 0; i <= index; i++) {
       result[i] = {
         ...result[i],
         add: true,
         smallCircle: {
-          value: input,
+          value: value,
         },
       };
       if (i > 0) {
@@ -177,7 +177,7 @@ export const ListPage: FC = () => {
       },
     };
     result.splice(index, 0, {
-      value: input,
+      value: value,
       state: ElementStates.Modified,
     });
     result.map((item) => (item.state = ElementStates.Default));
@@ -224,8 +224,8 @@ export const ListPage: FC = () => {
             maxLength={4}
             isLimitText={true}
             disabled={disabled}
-            name="input"
-            value={input}
+            name="value"
+            value={value}
             onChange={handleChange}
             required
             extraClass={style.input}
@@ -234,17 +234,19 @@ export const ListPage: FC = () => {
             text="Добавить в head"
             extraClass={"ml-6"}
             isLoader={loader.addToHead}
-            disabled={disabled || input.length === 0}
+            disabled={disabled || value.length === 0}
             onClick={addToHead}
             linkedList="small"
+            name="addToHead"
           />
           <Button
             text="Добавить в tail»"
             extraClass={"ml-6"}
             isLoader={loader.addToTail}
-            disabled={disabled || input.length === 0}
+            disabled={disabled || value.length === 0}
             onClick={addToTail}
             linkedList="small"
+            name="addToTail"
           />
           <Button
             text="Удалить из head"
@@ -253,6 +255,7 @@ export const ListPage: FC = () => {
             disabled={disabled || !result.length}
             onClick={deleteFromHead}
             linkedList="small"
+            name="delFromHead"
           />
           <Button
             text="Удалить из tail"
@@ -261,6 +264,7 @@ export const ListPage: FC = () => {
             disabled={disabled || !result.length}
             onClick={deleteFromTail}
             linkedList="small"
+            name="delFromTail"
           />
         </div>
         <div className={style.row}>
@@ -279,13 +283,14 @@ export const ListPage: FC = () => {
             isLoader={loader.addByIndex}
             disabled={
               disabled ||
-              !input ||
+              !value ||
               !index ||
               index > result.length - 1 ||
               index < 0
             }
             onClick={addByIndex}
             linkedList="big"
+            name="addByIndex"
           />
           <Button
             text="Удалить по индексу"
@@ -293,13 +298,14 @@ export const ListPage: FC = () => {
             isLoader={loader.deleteByIndex}
             disabled={
               disabled ||
-              !input ||
+              !value ||
               !index ||
               index > result.length - 1 ||
               index < 0
             }
             onClick={deleteByIndex}
             linkedList="big"
+            name="delByIndex"
           />
         </div>
       </form>

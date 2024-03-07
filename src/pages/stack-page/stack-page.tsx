@@ -6,6 +6,7 @@ import { TOP } from "../../utils/constants/element-captions";
 import style from "./stack-page.module.scss";
 import { delay } from "../../utils/utils";
 import { Stack } from "../../utils/classes/stack";
+import {DELAY_IN_MS} from "../../utils/constants/delays";
 
 const stack = new Stack<string>();
 
@@ -28,11 +29,11 @@ export const StackPage: FC = () => {
       stack.push(input);
       setResult([...result, { value: input, state: ElementStates.Modified }]);
       setInput("");
-      await delay(500);
+      await delay(DELAY_IN_MS);
       setResult([...result, { value: input, state: ElementStates.Default }]);
     } else {
       stack.pop();
-      await delay(500);
+      await delay(DELAY_IN_MS);
       setResult(result.slice(0, -1));
     }
     setLoader({ add: false, del: false });
@@ -58,6 +59,7 @@ export const StackPage: FC = () => {
           type="text"
           disabled={disabled}
           value={input}
+          name="value"
         />
         <Button
           text="Добавить"
@@ -65,6 +67,7 @@ export const StackPage: FC = () => {
           extraClass="ml-6"
           isLoader={loader.add}
           disabled={disabled || input.length < 1}
+          name="add"
         />
         <Button
           text="Удалить"
@@ -72,12 +75,14 @@ export const StackPage: FC = () => {
           onClick={(evt) => handleAction(evt, "delete")}
           isLoader={loader.del}
           disabled={disabled || stack.length() < 1}
+          name="del"
         />
         <Button
           text="Очистить"
           onClick={handleClear}
           extraClass="ml-40"
           disabled={disabled || stack.length() < 1}
+          name="clear"
         />
       </form>
       <div className={style.result}>

@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import styles from "./app-wrapper.module.scss";
+import style from "./app-wrapper.module.scss";
 
 export default function AppWrapper() {
   return (
-    <div className={styles.app}>
+    <div className={style.app}>
       <Outlet />
     </div>
   );

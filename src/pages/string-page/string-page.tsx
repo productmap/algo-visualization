@@ -2,9 +2,9 @@ import React, { FC, FormEvent, useState } from "react";
 import { ElementStates } from "../../utils/types/element-states";
 import { Button, Circle, Input, SolutionLayout } from "../../components/ui";
 import style from "./string-page.module.scss";
-import {TLettersArray} from "../../utils/types/misc";
-import {DELAY_IN_MS} from "../../utils/constants/delays";
+import { TLettersArray } from "../../utils/types/misc";
 import { useForm } from "../../utils/hooks/useForm";
+import { reverseString } from "../../utils/funcs/reverseString";
 
 export const StringPage: FC = () => {
   const { formValues, setValues, handleChange } = useForm({ value: "" });
@@ -12,81 +12,39 @@ export const StringPage: FC = () => {
   const [result, setResult] = useState<TLettersArray[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
 
-  const swap = (
-    arr: TLettersArray[],
-    left: number,
-    right: number,
-    changeType: ElementStates.Changing | ElementStates.Modified
-  ): TLettersArray[] => {
-    if (changeType === ElementStates.Changing) {
-      arr[left] = { ...arr[left], state: ElementStates.Changing };
-      arr[right] = { ...arr[right], state: ElementStates.Changing };
-    } else {
-      [arr[left], arr[right]] = [arr[right], arr[left]];
-      [arr[left].state, arr[right].state] = [
-        ElementStates.Modified,
-        ElementStates.Modified,
-      ];
-    }
-    return [...arr];
-  };
-
-  const step = (arr: TLettersArray[], left: number, right: number) => {
-    arr = swap(arr, left, right, ElementStates.Modified);
-    left++;
-    right--;
-    if (left < right) {
-      arr = swap(arr, left, right, ElementStates.Changing);
-      setResult(arr);
-      setTimeout(() => step(arr, left, right), DELAY_IN_MS);
-    } else {
-      setLoader(false);
-      if (left === right) {
-        arr = swap(arr, left, right, ElementStates.Modified);
-        setResult(arr);
-      }
-    }
-  };
-
-  const reverse = (arr: TLettersArray[], left = 0, right = arr.length - 1) => {
-    arr = swap(arr, left, right, ElementStates.Changing);
-    setResult(arr);
-    setTimeout(() => step(arr, left, right), DELAY_IN_MS);
-  };
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setLoader(true);
-
-    const string = Array.from(String(value)).map((letter) => ({
+    const stringArr = Array.from(String(value)).map((letter) => ({
       letter,
       state: ElementStates.Default,
     }));
-    setResult(string);
-    reverse(string);
     setValues({ value: "" });
+
+    setResult(stringArr);
+    await reverseString(stringArr, setLoader, setResult);
   };
 
   return (
     <SolutionLayout title="Строка">
       <form className={style.form} onSubmit={handleSubmit}>
         <Input
+          disabled={loader}
           isLimitText={true}
           maxLength={11}
           minLength={1}
+          name="value"
           onChange={handleChange}
           placeholder="Введите текст"
           required
           type="text"
           value={value}
-          name="value"
         />
         <Button
-          type="submit"
-          text="Развернуть"
+          disabled={value.length < 1}
           extraClass="ml-6"
           isLoader={loader}
-          disabled={value.length < 1}
+          text="Развернуть"
+          type="submit"
         />
       </form>
       <div className={style.result}>
