@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;900&display=swap");
+
+@import "components/ui/common.css";
+@import "components/ui/box.css";
+
+* {
+  // Базовый шрифт
+  // Отключение выделения текста на странице
+  user-select: none;
+  font-family: "Jet Brains Mono", Verdana, monospace;
+  font-weight: normal;
+  // Плавный скрол
+  scroll-behavior: smooth;
+  // Сглаживание шрифтов
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  // Отключение зума на мобильных
+  touch-action: pan-x pan-y;
+  // Отключение подсветки при тапе
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}

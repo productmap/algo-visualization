@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "./circle.module.css";
-import { ElementStates } from "../../../types/element-states";
+import styles from "./circle.module.scss";
+import { ElementStates } from "../../../utils/types/element-states";
 
 interface CircleProps {
   state?: ElementStates;

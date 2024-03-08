@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./input.module.css";
+import styles from "./input.module.scss";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   placeholder?: string;
